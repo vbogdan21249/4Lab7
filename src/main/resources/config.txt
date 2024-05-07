@@ -1,0 +1,9 @@
+playSpaceType=circular
+width=20
+height=21
+playSpaceType=rectangular
+width=23
+height=10
+playSpaceType=rectangular
+width=23
+height=10
