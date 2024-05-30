@@ -19,6 +19,7 @@ public class ConfigurationLoader {
 
     /**
      * Constructs a ConfigurationLoader with the given file path.
+     *
      * @param filePath The path to the configuration file.
      */
     public ConfigurationLoader(String filePath) {
@@ -27,6 +28,7 @@ public class ConfigurationLoader {
 
     /**
      * Loads play space configurations from the file.
+     *
      * @return A list of builders representing the loaded play space configurations.
      */
     public List<Builder> loadPlaySpaceConfig() {
@@ -41,32 +43,33 @@ public class ConfigurationLoader {
             while ((line = reader.readLine()) != null) {
                 line = line.trim();
                 if (line.isEmpty()) {
-                    continue; // Пропускаем пустые строки
+                    continue;
                 }
                 String[] parts = line.split("=");
                 if (parts.length == 2) {
                     String key = parts[0].trim();
                     String value = parts[1].trim();
 
-                    if ("playSpaceType".equals(key)) {
-                        playSpaceType = value;
-                    } else if ("width".equals(key)) {
-                        width = Integer.parseInt(value);
-                    } else if ("height".equals(key)) {
-                        height = Integer.parseInt(value);
+                    switch (key) {
+                        case "playSpaceType" -> playSpaceType = value;
+                        case "width" -> width = Integer.parseInt(value);
+                        case "height" -> height = Integer.parseInt(value);
                     }
 
-                    // if there are all the necessary data, we create the corresponding builder and add it to the list
                     if (playSpaceType != null && width > 0 && height > 0) {
                         Builder builder;
-                        if ("rectangular".equals(playSpaceType)) {
-                            builder = new RectangularBuilder();
-                        } else if ("circular".equals(playSpaceType)) {
-                            builder = new CircularBuilder();
-                        } else {
-                            System.err.println("Unknown play space type: " + playSpaceType);
-                            continue;
+                        switch (playSpaceType) {
+                            case "rectangular":
+                                builder = new RectangularBuilder();
+                                break;
+                            case "circular":
+                                builder = new CircularBuilder();
+                                break;
+                            default:
+                                System.err.println("Unknown play space type: " + playSpaceType);
+                                continue;
                         }
+
                         builder.setWidth(width);
                         builder.setHeight(height);
                         builders.add(builder);
